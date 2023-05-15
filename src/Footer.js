@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div className="w-full p-3 text-black flex fixed justify-center bottom-0">
+    <div className="w-full p-3 text-black flex fixed justify-center bottom-0 xl:hidden">
       <div className="flex items-center space-x-5 ">
         <Link to="/">
-          <span className="text-orange-500 font-bold">
+          <span className="text-orange-500 font-bold sm:hidden ">
             Apply4Job <span className="text-xs text-gray-500">© 2023</span>
           </span>
         </Link>
-
-        <ul className="flex space-x-4 align-bottom  text-gray-500  font-bold text-xs">
+     
+        <ul className="flex space-x-4 align-bottom  text-gray-500 lg:hidden md:hidden sm:hidden font-bold text-xs">
           <li className="hover:text-orange-400 hover:cursor-pointer">
             Kullanıcı Anlaşması
           </li>

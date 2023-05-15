@@ -4,7 +4,7 @@ import { Link } from "react-router-dom/dist";
 const Login = () => {
   return (
     <div className="w-full centered-items mt-[5%] ">
-      <div className="w-3/12">
+      <div className="w-3/12 lg:w-4/12 md:w-6/12 sm:w-6/12 min-w-fit">
         <div className="w-full p-4   shadow-2xl   space-y-4">
           <div className="space-y-1">
             <div>
