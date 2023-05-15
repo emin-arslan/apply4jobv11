@@ -7,7 +7,7 @@ const HomePage = () => {
   return (
     <div className="w-11/12 flex items-center  mt-16 sm:pt-5 min-w-[435px] sm:mt-0 ">
       <div className="w-6/12 space-y-5  min-w-[435px]  md:min-w-[300px]  md:justify-start ml-3   ">
-        <div className="w-11/12 sm:w-full md:w-full flex justify-center  lg:justify-base ">
+        <div className="w-11/12 sm:w-full  md:w-full flex justify-center  lg:justify-base ">
           <span className="w-6/12 flex md:w-full md:justify-start   sm:w-full sm:justify-center   text-4xl font-thin md:text-3xl lg:text-2xl xl:text-3xl sm:text-3xl  text-orange-800 ">
             Welcome to your <br /> professional society!
           </span>
