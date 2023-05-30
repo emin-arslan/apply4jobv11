@@ -9,15 +9,15 @@ const HomePage = () => {
     <div className="w-11/12 flex sm:mt-5  mt-16 lg:w-full md:w-full sm:w-full centered-items  ">
       <div className="w-6/12 space-y-5  x lg:w-5/12 sm:min-w-[400px]    ">
         <div className="w-11/12 sm:w-full  md:w-full flex justify-center   lg:w-full  lg:justify-start  ">
-          <span className="w-6/12 flex md:w-full md:justify-start lg:w-full   sm:w-full sm:justify-center  text-4xl font-thin md:text-3xl lg:text-3xl xl:text-3xl sm:text-3xl  text-orange-800 ">
+          <span className="w-6/12 flex md:w-full md:justify-start lg:w-full   sm:w-8/12 sm:justify-start   text-4xl font-thin md:text-3xl lg:text-3xl xl:text-3xl sm:text-3xl  text-orange-800 ">
           Welcome to your <br/>professional society
           </span>
        
         </div>
 
-        <div className="w-11/12 sm:w-full md:w-full md:justify-start lg:justify-start   flex justify-center">
+        <div className="w-11/12 sm:w-full md:w-full md:justify-start lg:justify-start    flex justify-center">
           <div className="w-6/12 sm:w-8/12 lg:w-9/12  md:w-11/12 ">
-            <div className="w-full ">
+            <div className="w-full  ">
               <label htmlFor="idValue" className="text-sm text-gray-500 ">
                 E-mail or Phone number
               </label>

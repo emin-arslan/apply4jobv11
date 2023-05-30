@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom/dist";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux"
+import { loginRequest } from "../redux/actions/UserLogin";
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
-  const sendLoginData = async () => {
-    let result = await fetch("http://localhost:5000/login", {
-      method: "post",
-      body: JSON.stringify({ email, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    result = await result.json();
-    console.log(result)
-  };
+  const dispatch = useDispatch();
 
   const handleLoginClick = () => {
     let textBox = "";
@@ -46,7 +37,7 @@ const Login = () => {
       document.getElementById("emailBox").className = "text-sm text-gray-500 ";
       document.getElementById("passwordBox").className =
         "text-sm text-gray-500 ";
-        
+        dispatch(loginRequest({email:"bruce@test.com",password:"abc123"}));
     }
   };
   return (
@@ -115,7 +106,7 @@ const Login = () => {
           </div>
 
           <div
-            onClick={sendLoginData}
+            onClick={handleLoginClick}
             className=" hover:cursor-pointer text-white bg-orange-400 hover:text-orange-400 flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl "
           >
             <span className="font-bold">Login</span>
