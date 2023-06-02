@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom/dist";
 
 const SignUp = () => {
+  const [user, setUser] = useState();
+  const handleClick = () => {
+    console.warn('user', user)
+  }
+
   return (
     <div className="w-full centered-items mt-[5%] ">
         <div className="w-3/12 lg:w-4/12 md:w-6/12 sm:w-6/12 min-w-fit ">
@@ -26,9 +31,10 @@ const SignUp = () => {
           </div>
           <div>
             <input
+              onChange={(e)=>setUser( {...user,email:e.target.value})}
               id="idValue"
               name="idValue"
-              className="border-black border p-5 text-gray-500  w-full h-12 rounded focus:outline-orange-600"
+              className="border-black border  p-5 text-gray-500  w-full h-12 rounded focus:outline-orange-600"
             />
           </div>
         </div>
@@ -42,7 +48,9 @@ const SignUp = () => {
 
             <div className="">
               <div className="border-black border justify-baseline items-center flex hover:border-orange-600 hover:border-2 p-1  w-full h-12 rounded">
-                <input className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none" />
+                <input 
+                onChange={(e)=>setUser( {...user,password:e.target.value})}
+                className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none" />
                 <span className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600">
                   Show
                 </span>
@@ -50,7 +58,9 @@ const SignUp = () => {
             </div>
           </div>
 
-          <div className=" hover:cursor-pointer text-white bg-orange-400 hover:orange flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl ">
+          <div 
+          onClick={handleClick}
+          className=" hover:cursor-pointer text-white bg-orange-400 hover:orange flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl ">
             <span className="font-bold ">Sign Up</span>
           </div>
 

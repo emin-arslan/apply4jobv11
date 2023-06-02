@@ -1,43 +1,96 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom/dist";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom/dist";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux"
-import { loginRequest } from "../redux/actions/UserLogin";
+import { useDispatch, useSelector } from "react-redux";
+import { loginRequest } from "../redux/actions/UserLoginAction";
+import { userLogout } from "../redux/actions/UserLogoutAction";
+import { delay } from "redux-saga/effects";
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [timer, setTimer] = useState();
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const startTimer = async (value) => {
+    let i = 5;
+    setTimer(value);
+    while (i > 0) {
+      await delay(1000);
+      setTimer(i);
+      i--;
+    }
+    await delay(1000);
+    setTimer(undefined);
+  };
+
+  let getResult = useSelector((state) => state.UserReducer.result);
+
+  useEffect(() => {
+    if (getResult == false || getResult == true) {
+      if (getResult) {
+        toast("Giriş Başarılı Yönlendiriliyorsunuz.", {
+          autoClose: 1000,
+          theme: "colored",
+          type: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else if (!getResult) {
+        startTimer(5);
+        console.warn("result", getResult);
+        toast("Bilgilerinizi Kontrol Ediniz.", {
+          autoClose: 1000,
+          theme: "colored",
+          type: "error",
+        });
+        dispatch(userLogout("clearResult"));
+      }
+    }
+  }, [getResult]);
 
   const handleLoginClick = () => {
-    let textBox = "";
-    if (!email || !password) {
-      if (!email && !password) {
-        document.getElementById("emailBox").className =
-          "text-red-600 font-bold ";
-        document.getElementById("passwordBox").className =
-          "text-red-600 font-bold ";
-      } else if (!email) {
-        textBox = document.getElementById("emailBox");
-        textBox.className += " text-red-600 font-bold ";
-        document.getElementById("passwordBox").className =
-          "text-sm text-gray-500 ";
-      } else if (!password) {
-        textBox = document.getElementById("passwordBox");
-        document.getElementById("emailBox").className =
-          "text-sm text-gray-500 ";
-        textBox.className = " text-red-600 font-bold ";
-      }
-      toast("Boş alan bırakmayınız", {
+    if (timer !== undefined) {
+      toast("5 sn bekleyin veya bilgilerinizi değiştirin.", {
         autoClose: 1000,
         theme: "colored",
         type: "error",
       });
     } else {
-      document.getElementById("emailBox").className = "text-sm text-gray-500 ";
-      document.getElementById("passwordBox").className =
-        "text-sm text-gray-500 ";
-        dispatch(loginRequest({email:"bruce@test.com",password:"abc123"}));
+      let textBox = "";
+      if (!email || !password) {
+        if (!email && !password) {
+          document.getElementById("emailBox").className =
+            "text-red-600 font-bold ";
+          document.getElementById("passwordBox").className =
+            "text-red-600 font-bold ";
+        } else if (!email) {
+          textBox = document.getElementById("emailBox");
+          textBox.className += " text-red-600 font-bold ";
+          document.getElementById("passwordBox").className =
+            "text-sm text-gray-500 ";
+        } else if (!password) {
+          textBox = document.getElementById("passwordBox");
+          document.getElementById("emailBox").className =
+            "text-sm text-gray-500 ";
+          textBox.className = " text-red-600 font-bold ";
+        }
+        toast("Boş alan bırakmayınız", {
+          autoClose: 1000,
+          theme: "colored",
+          type: "error",
+        });
+      } else {
+        document.getElementById("emailBox").className =
+          "text-sm text-gray-500 ";
+        document.getElementById("passwordBox").className =
+          "text-sm text-gray-500 ";
+        dispatch(loginRequest({ email: email, password: password }));
+      }
     }
   };
   return (
@@ -109,7 +162,9 @@ const Login = () => {
             onClick={handleLoginClick}
             className=" hover:cursor-pointer text-white bg-orange-400 hover:text-orange-400 flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl "
           >
-            <span className="font-bold">Login</span>
+            <span className="font-bold">
+              Login {timer !== undefined && "(" + timer + ")"}{" "}
+            </span>
           </div>
 
           <div className="space-y-5">
