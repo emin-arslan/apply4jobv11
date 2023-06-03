@@ -16,12 +16,14 @@ const Login = () => {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const startTimer = async (value) => {
-    let i = 5;
+    let i = 3;
     setTimer(value);
     while (i > 0) {
-      await delay(1000);
+      if(timer===0) break;
       setTimer(i);
-      i--;
+      
+      await delay(1000);
+      i--; 
     }
     await delay(1000);
     setTimer(undefined);
@@ -55,7 +57,7 @@ const Login = () => {
 
   const handleLoginClick = () => {
     if (timer !== undefined) {
-      toast("5 sn bekleyin veya bilgilerinizi değiştirin.", {
+      toast("Tekrar giriş için 3 sn bekleyiniz.", {
         autoClose: 1000,
         theme: "colored",
         type: "error",
@@ -124,7 +126,9 @@ const Login = () => {
                 id="emailBox"
                 name="emailBox"
                 className="border-black border p-5 text-gray-500  w-full h-12 rounded focus:outline-orange-600"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) =>{ setEmail(e.target.value) 
+                  //email !== e.target.value ? setTimer(0) : console.warn('deneme')
+                }}
               />
             </div>
           </div>
@@ -144,7 +148,9 @@ const Login = () => {
               <div className="border-black border justify-baseline items-center flex hover:border-orange-600 hover:border-2 p-1  w-full h-12 rounded">
                 <input
                   className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value);
+                    //password !== e.target.value ?  setTimer(0)  : console.warn('deneme')
+                  }}
                 />
                 <span className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600">
                   Show
@@ -163,7 +169,7 @@ const Login = () => {
             className=" hover:cursor-pointer text-white bg-orange-400 hover:text-orange-400 flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl "
           >
             <span className="font-bold">
-              Login {timer !== undefined && "(" + timer + ")"}{" "}
+              Login {timer !== undefined && timer !== 0 && "(" + timer + ")"}
             </span>
           </div>
 

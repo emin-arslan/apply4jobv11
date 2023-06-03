@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom/dist";
+import { userSignUp } from "../redux/actions/UserSignAction";
 
-const SignUp = () => {
-  const [user, setUser] = useState();
-  const handleClick = () => {
-    console.warn('user', user)
+const SignUp = (userData) => {
+  const data = userData
+
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const dispatch = useDispatch();
+  const handleClick = async () => {
+    dispatch(userSignUp({email:emailRef.current.value,password:passwordRef.current.value,ipAddress:data.ip}))
   }
 
   return (
@@ -31,7 +37,7 @@ const SignUp = () => {
           </div>
           <div>
             <input
-              onChange={(e)=>setUser( {...user,email:e.target.value})}
+            ref={emailRef}
               id="idValue"
               name="idValue"
               className="border-black border  p-5 text-gray-500  w-full h-12 rounded focus:outline-orange-600"
@@ -49,7 +55,8 @@ const SignUp = () => {
             <div className="">
               <div className="border-black border justify-baseline items-center flex hover:border-orange-600 hover:border-2 p-1  w-full h-12 rounded">
                 <input 
-                onChange={(e)=>setUser( {...user,password:e.target.value})}
+                type="text"
+                ref={passwordRef}
                 className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none" />
                 <span className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600">
                   Show

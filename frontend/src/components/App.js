@@ -10,14 +10,21 @@ import PrivateComponent from "./PrivateComponent";
 import JobsPage from "./JobsPage";
 import { useDispatch } from "react-redux";
 import { userCheck } from "../redux/actions/UserCheckAction";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from 'axios'
 
 function App() {
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("user");
-
+  const [ip,setIP] = useState('');
   const dispatch = useDispatch();
+  const getData = async()=>{
+    const res = await axios.get('https://geolocation-db.com/json/')
+    console.log(res.data);
+    setIP(res.data.IPv4)
+}
   useEffect(() => {
+    getData()
     if (
       user &&
       token &&
@@ -40,7 +47,7 @@ function App() {
             <Route path="/jobs" element={<JobsPage />} />
           </Route>
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp ip={ip} />} />
           <Route path="/" element={<HomePage />} />
         </Routes>
       </div>

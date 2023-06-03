@@ -33,10 +33,12 @@ app.post("/login", async (req, resp) => {
 
 
 app.post("/signup", async(req, resp) => {
-    if (req.body.email && req.body.password) {
-        
+    console.log(req.body)
+    if (req.body.email && req.body.password && req.body.ipAddress) {
+        const user = await User.insertMany(req.body)
+        if(user) console.warn('eklendi.')
     }
-    else resp.send({result:false});
+    else console.log('as')
 })
 
 app.post("/check", verifyToken, async (req,resp)=>{
