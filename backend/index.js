@@ -4,8 +4,8 @@ const cors = require("cors");
 app.use(cors());
 const User = require("./db/User");
 const Jwt = require("jsonwebtoken");
+const isMailValid = require("./utils");
 const jwtKey = "apply4job";
-
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 
@@ -34,12 +34,25 @@ app.post("/login", async (req, resp) => {
 
 app.post("/signup", async(req, resp) => {
     console.log(req.body)
-    if (req.body.email && req.body.password && req.body.ipAddress) {
-        const user = await User.insertMany(req.body)
-        if(user) console.warn('eklendi.')
+    if (req.body.email &&  typeof(req.body.email)==='string' && isMailValid(req.body.email) && req.body.password && req.body.ipAddress) {
+        let user = await User.findOne({email:req.body.email}).select("-password");
+            if(user) {
+                console.warn('there is a problem ')
+            }
+            else
+            {
+                user = await User.insertMany(req.body)
+                console.warn('sadaksdk')
+                if(user) console.warn('eklendi.')
+                
+            }
+         
+       
     }
     else console.log('as')
-})
+    resp.status(200).send({result:'deneme',status:200,info:'Added successfully'})
+}
+)
 
 app.post("/check", verifyToken, async (req,resp)=>{
     await delay(5000)

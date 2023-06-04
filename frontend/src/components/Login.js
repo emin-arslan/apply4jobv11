@@ -11,25 +11,15 @@ const Login = () => {
   const [password, setPassword] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [timer, setTimer] = useState();
-
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  const startTimer = async (value) => {
-    let i = 3;
-    setTimer(value);
-    while (i > 0) {
-      if(timer===0) break;
-      setTimer(i);
-      
-      await delay(1000);
-      i--; 
-    }
-    await delay(1000);
-    setTimer(undefined);
-  };
-
+  const [isDisabled, setIsDisabled] = useState(false);
+  let myTimeout ;
+  
   let getResult = useSelector((state) => state.UserReducer.result);
+
+  const changeDisabledStatus = () => {
+      setIsDisabled(false)
+      clearTimeout(myTimeout)
+  }
 
   useEffect(() => {
     if (getResult == false || getResult == true) {
@@ -43,7 +33,7 @@ const Login = () => {
           navigate("/");
         }, 2000);
       } else if (!getResult) {
-        startTimer(5);
+       
         console.warn("result", getResult);
         toast("Bilgilerinizi Kontrol Ediniz.", {
           autoClose: 1000,
@@ -51,49 +41,55 @@ const Login = () => {
           type: "error",
         });
         dispatch(userLogout("clearResult"));
+        setIsDisabled(true);
+        myTimeout = setTimeout(changeDisabledStatus,4000)
+
       }
     }
   }, [getResult]);
 
   const handleLoginClick = () => {
-    if (timer !== undefined) {
-      toast("Tekrar giriş için 3 sn bekleyiniz.", {
+    if(isDisabled) {
+      toast("3 sn bekleyin veya bilgilerinizi değiştirin.", {
+        autoClose: 1000,
+        theme: "colored",
+        type: "error",
+      });
+    }
+    else{
+
+    
+    let textBox = "";
+    if (!email || !password) {
+      if (!email && !password) {
+        document.getElementById("emailBox").className =
+          "text-red-600 font-bold ";
+        document.getElementById("passwordBox").className =
+          "text-red-600 font-bold ";
+      } else if (!email) {
+        textBox = document.getElementById("emailBox");
+        textBox.className += " text-red-600 font-bold ";
+        document.getElementById("passwordBox").className =
+          "text-sm text-gray-500 ";
+      } else if (!password) {
+        textBox = document.getElementById("passwordBox");
+        document.getElementById("emailBox").className =
+          "text-sm text-gray-500 ";
+        textBox.className = " text-red-600 font-bold ";
+      }
+      toast("Boş alan bırakmayınız", {
         autoClose: 1000,
         theme: "colored",
         type: "error",
       });
     } else {
-      let textBox = "";
-      if (!email || !password) {
-        if (!email && !password) {
-          document.getElementById("emailBox").className =
-            "text-red-600 font-bold ";
-          document.getElementById("passwordBox").className =
-            "text-red-600 font-bold ";
-        } else if (!email) {
-          textBox = document.getElementById("emailBox");
-          textBox.className += " text-red-600 font-bold ";
-          document.getElementById("passwordBox").className =
-            "text-sm text-gray-500 ";
-        } else if (!password) {
-          textBox = document.getElementById("passwordBox");
-          document.getElementById("emailBox").className =
-            "text-sm text-gray-500 ";
-          textBox.className = " text-red-600 font-bold ";
-        }
-        toast("Boş alan bırakmayınız", {
-          autoClose: 1000,
-          theme: "colored",
-          type: "error",
-        });
-      } else {
-        document.getElementById("emailBox").className =
-          "text-sm text-gray-500 ";
-        document.getElementById("passwordBox").className =
-          "text-sm text-gray-500 ";
-        dispatch(loginRequest({ email: email, password: password }));
-      }
+      document.getElementById("emailBox").className =
+        "text-sm text-gray-500 ";
+      document.getElementById("passwordBox").className =
+        "text-sm text-gray-500 ";
+      dispatch(loginRequest({ email: email, password: password }));
     }
+  }
   };
   return (
     <div className="w-full centered-items mt-[5%] ">
@@ -126,8 +122,9 @@ const Login = () => {
                 id="emailBox"
                 name="emailBox"
                 className="border-black border p-5 text-gray-500  w-full h-12 rounded focus:outline-orange-600"
-                onChange={(e) =>{ setEmail(e.target.value) 
-                  //email !== e.target.value ? setTimer(0) : console.warn('deneme')
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  changeDisabledStatus()
                 }}
               />
             </div>
@@ -148,8 +145,9 @@ const Login = () => {
               <div className="border-black border justify-baseline items-center flex hover:border-orange-600 hover:border-2 p-1  w-full h-12 rounded">
                 <input
                   className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none"
-                  onChange={(e) => { setPassword(e.target.value);
-                    //password !== e.target.value ?  setTimer(0)  : console.warn('deneme')
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    changeDisabledStatus()
                   }}
                 />
                 <span className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600">
@@ -166,10 +164,11 @@ const Login = () => {
 
           <div
             onClick={handleLoginClick}
+
             className=" hover:cursor-pointer text-white bg-orange-400 hover:text-orange-400 flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl "
           >
             <span className="font-bold">
-              Login {timer !== undefined && timer !== 0 && "(" + timer + ")"}
+              Login 
             </span>
           </div>
 
