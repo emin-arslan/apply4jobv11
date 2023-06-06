@@ -1,21 +1,20 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { userLogout } from "../redux/actions/UserLogoutAction";
+import { userLogout } from "../redux/actions/UserLogout";
 
 const Navi = () => {
   const user = useSelector((state)=> state.UserReducer)
   const location = useLocation();
   const dispacth = useDispatch()
   const navigate = useNavigate();
-  
+ 
   const logOut = () =>{
-    console.warn('logoutt')
-    dispacth(userLogout('logout'))
+    dispacth(userLogout())
     navigate('/')
   }
   return (
-    <div className="w-11/12 h-20 flex items-center text-[#707070] space-x-2 font-exo lg:w-full sm:justify-center sm:w-full  md:w-full ">
+    <div className="w-11/12 h-20  flex items-center text-[#707070] space-x-2 font-exo lg:w-full sm:justify-center sm:w-full  md:w-full ">
       <div className="w-4/12 lg:w-2/12 lg:justify-start sm:min-w-[400px]  h-full  centered-items ">
         <Link to="/">
           <span className="orange font-bold text-2xl font-sans  ">
@@ -49,7 +48,7 @@ const Navi = () => {
             : "visible"
         }  `}
       >
-        {user.lifesycle == true ? (
+        {user.userData.lifesycle  == true ? (
           <span onClick={()=>logOut()} className="font-bold border-r   h-12  mt-1 centered-items pr-4 hover:orange hover:cursor-pointer">
             Log out
           </span>
@@ -60,7 +59,7 @@ const Navi = () => {
             </span>
           </Link>
         )}
-        {user.lifesycle == true ? (
+        {user.userData.lifesycle == true ? (
           <span className="font-bold bg-orange-400 h-12  w-12 rounded-3xl text-white centered-items mt-1  hover:orange hover:cursor-pointer">
             E
           </span>

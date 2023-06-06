@@ -1,37 +1,47 @@
 import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom/dist";
-import { userSignUp } from "../redux/actions/UserSignAction";
+import { userSignUp } from "../redux/actions/UserSign";
 import { toast } from "react-toastify";
 import { isMailValid } from "../utils";
+import { toastMessage } from "../redux/actions/ToastMessageRequest";
 
 const SignUp = (userData) => {
-
-  const data = userData
+  const data = userData;
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+
   const dispatch = useDispatch();
-  const handleClick = async () => {
-    if (isMailValid(emailRef.current.value) && typeof (emailRef.current.value) === 'string' && passwordRef.current.value && data.ip) {
-      dispatch(userSignUp({ email: emailRef.current.value, password: passwordRef.current.value, ipAddress: data.ip }))
-      toast("Kayıt Başarılı. Yönlendiriliyorsunuz...", {
-        autoClose: 1000,
-        theme: "colored",
-        type: "success",
-      });
-    }
-    else
-      toast("Lütfen boş alan bırakmayınız.", {
-        autoClose: 1000,
-        theme: "colored",
-        type: "error",
-      });
-  }
+  const handleClick = () => {
+    let signUpData = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
+    if (
+      isMailValid(signUpData.email) &&
+      typeof signUpData.email === "string" &&
+      signUpData.password &&
+      data.ip
+    ) {
+      dispatch(
+        userSignUp({
+          email: signUpData.email,
+          password: signUpData.password,
+          ipAddress: data.ip,
+        })
+      );
+    } else
+      dispatch(
+        toastMessage({
+          body: "Lütfen boş alan bırakmayınız.",
+          isSuccess: false,
+        })
+      );
+  };
 
   return (
     <div className="w-full centered-items mt-[5%] ">
       <div className="w-3/12 lg:w-4/12 md:w-6/12 sm:w-6/12 min-w-fit ">
-
         <div className="w-full p-4   shadow-xl   space-y-4">
           <div className="space-y-1">
             <div>
@@ -39,7 +49,7 @@ const SignUp = (userData) => {
             </div>
             <div>
               <span className="text-sm text-gray-500">
-                Make the most of professional life
+              Remain informed about your vocational realm.
               </span>
             </div>
           </div>
@@ -67,13 +77,15 @@ const SignUp = (userData) => {
               </label>
             </div>
 
-            <div className="">
-              <div className="border-black border justify-baseline items-center flex hover:border-orange-600 hover:border-2 p-1  w-full h-12 rounded">
+            <div className="bg-white h-full">
+              <div className="border-black border   justify-baseline items-center flex hover:border-orange-600 hover:border-2   w-full h-12 rounded">
                 <input
-                  type="text"
+                
+                  type="password"
                   ref={passwordRef}
-                  className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none" />
-                <span className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600">
+                  className="w-9/12 h-2 p-4 text-gray-500 focus:outline-none"
+                />
+                <span className="w-3/12  bg-white flex items-center  justify-center hover:cursor-pointer text-sm text-orange-600">
                   Show
                 </span>
               </div>
@@ -82,13 +94,14 @@ const SignUp = (userData) => {
 
           <div
             onClick={handleClick}
-            className=" hover:cursor-pointer text-white bg-orange-400 hover:orange flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl ">
+            className=" hover:cursor-pointer text-white bg-orange-400 hover:orange flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl "
+          >
             <span className="font-bold ">Sign Up</span>
           </div>
 
           <div className="space-y-5">
             <div className="w-full h-5 border-b  border-gray-300 text-2xl text-center ">
-              <span className=" text-orange-400 text-base bg-white px-4 ">
+              <span className=" text-orange-400 bg-[#f3f2ef]  text-base bg-white px-4 ">
                 or
               </span>
             </div>
@@ -98,8 +111,6 @@ const SignUp = (userData) => {
               </span>
             </div>
           </div>
-
-
         </div>
         <div className="w-full flex mt-6 justify-center text-gray-600 font-bold">
           <span className="">

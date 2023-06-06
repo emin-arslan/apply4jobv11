@@ -2,13 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import { UserReducer } from '../redux/reducers/UserReducer';
+import { delay } from 'redux-saga/effects';
 
-const PrivateComponent =  () => {
-    const user = useSelector((state)=> state.UserReducer)
-    
-    console.log('auth değeri', user.lifesycle)
-    if(user.lifesycle==true){
-        console.warn('wtf')
+const PrivateComponent =  (lifesycle) => {
+    let userData = lifesycle;
+    if(userData.lifesycle===true){
         return <Outlet/>
     }
     else return <Navigate to="/login"/>

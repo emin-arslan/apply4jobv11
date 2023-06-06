@@ -1,95 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom/dist";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { loginRequest } from "../redux/actions/UserLoginAction";
-import { userLogout } from "../redux/actions/UserLogoutAction";
+import { loginRequest } from "../redux/actions/UserLogin";
+import { userLogout } from "../redux/actions/UserLogout";
 import { delay } from "redux-saga/effects";
+import { toastMessage } from "../redux/actions/ToastMessageRequest";
 
 const Login = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
-  let myTimeout ;
-  
+  let myTimeout;
+
   let getResult = useSelector((state) => state.UserReducer.result);
 
   const changeDisabledStatus = () => {
-      setIsDisabled(false)
-      clearTimeout(myTimeout)
-  }
-
-  useEffect(() => {
-    if (getResult == false || getResult == true) {
-      if (getResult) {
-        toast("Giriş Başarılı Yönlendiriliyorsunuz.", {
-          autoClose: 1000,
-          theme: "colored",
-          type: "success",
-        });
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else if (!getResult) {
-       
-        console.warn("result", getResult);
-        toast("Bilgilerinizi Kontrol Ediniz.", {
-          autoClose: 1000,
-          theme: "colored",
-          type: "error",
-        });
-        dispatch(userLogout("clearResult"));
-        setIsDisabled(true);
-        myTimeout = setTimeout(changeDisabledStatus,4000)
-
-      }
-    }
-  }, [getResult]);
+    setIsDisabled(false);
+    clearTimeout(myTimeout);
+  };
 
   const handleLoginClick = () => {
-    if(isDisabled) {
-      toast("3 sn bekleyin veya bilgilerinizi değiştirin.", {
-        autoClose: 1000,
-        theme: "colored",
-        type: "error",
-      });
-    }
-    else{
-
-    
-    let textBox = "";
-    if (!email || !password) {
-      if (!email && !password) {
-        document.getElementById("emailBox").className =
-          "text-red-600 font-bold ";
-        document.getElementById("passwordBox").className =
-          "text-red-600 font-bold ";
-      } else if (!email) {
-        textBox = document.getElementById("emailBox");
-        textBox.className += " text-red-600 font-bold ";
-        document.getElementById("passwordBox").className =
-          "text-sm text-gray-500 ";
-      } else if (!password) {
-        textBox = document.getElementById("passwordBox");
-        document.getElementById("emailBox").className =
-          "text-sm text-gray-500 ";
-        textBox.className = " text-red-600 font-bold ";
-      }
-      toast("Boş alan bırakmayınız", {
-        autoClose: 1000,
-        theme: "colored",
-        type: "error",
-      });
+    if (isDisabled) {
+      dispatch(
+        toastMessage({
+          body: "3 sn bekleyin veya bilgilerinizi değiştirin.",
+          isSuccess: false,
+        })
+      );
     } else {
-      document.getElementById("emailBox").className =
-        "text-sm text-gray-500 ";
-      document.getElementById("passwordBox").className =
-        "text-sm text-gray-500 ";
-      dispatch(loginRequest({ email: email, password: password }));
+      let signUpData = {
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      };
+      if (!signUpData.email || !signUpData.password ) {
+        dispatch(
+          toastMessage({
+            body: "Boş alan bırakmayınız",
+            isSuccess: false,
+          })
+        );
+        setIsDisabled(true)
+        myTimeout = setTimeout(changeDisabledStatus,3000);
+      } else {
+        dispatch(loginRequest({ email: signUpData.email , password:signUpData.password }));
+        setIsDisabled(true)
+        myTimeout = setTimeout(changeDisabledStatus,3000);
+      }
     }
-  }
   };
   return (
     <div className="w-full centered-items mt-[5%] ">
@@ -101,7 +61,7 @@ const Login = () => {
             </div>
             <div>
               <span className="text-sm text-gray-500">
-                Keep up-to-date with your professional world
+                Keep up-to-date with your professional world.
               </span>
             </div>
           </div>
@@ -119,12 +79,12 @@ const Login = () => {
 
             <div className="">
               <input
+                ref={emailRef}
                 id="emailBox"
                 name="emailBox"
                 className="border-black border p-5 text-gray-500  w-full h-12 rounded focus:outline-orange-600"
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                  changeDisabledStatus()
+                onChange={() => {
+                  changeDisabledStatus();
                 }}
               />
             </div>
@@ -133,6 +93,7 @@ const Login = () => {
           <div className="space-y-1">
             <div className="">
               <label
+              
                 htmlFor="passwordBox"
                 id="passwordBox"
                 className="text-sm text-gray-500"
@@ -141,13 +102,14 @@ const Login = () => {
               </label>
             </div>
 
-            <div className="" id="passwordBox">
+            <div className="bg-white" id="passwordBox">
               <div className="border-black border justify-baseline items-center flex hover:border-orange-600 hover:border-2 p-1  w-full h-12 rounded">
                 <input
+                  type="password"
+                  ref={passwordRef}
                   className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none"
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    changeDisabledStatus()
+                  onChange={() => {
+                    changeDisabledStatus();
                   }}
                 />
                 <span className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600">
@@ -164,17 +126,14 @@ const Login = () => {
 
           <div
             onClick={handleLoginClick}
-
             className=" hover:cursor-pointer text-white bg-orange-400 hover:text-orange-400 flex items-center hover:bg-orange-100 justify-center p-3 w-full  border border-orange-500 rounded-xl "
           >
-            <span className="font-bold">
-              Login 
-            </span>
+            <span className="font-bold">Login</span>
           </div>
 
           <div className="space-y-5">
             <div className="w-full h-5 border-b  border-gray-300 text-2xl text-center mb-4">
-              <span className=" text-orange-400 text-base bg-white px-4 ">
+              <span className=" text-orange-400 bg-[#f3f2ef]  text-base bg-white px-4 ">
                 or
               </span>
             </div>
