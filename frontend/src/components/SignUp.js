@@ -101,7 +101,7 @@ const SignUp = (userData) => {
 
           <div className="space-y-5">
             <div className="w-full h-5 border-b  border-gray-300 text-2xl text-center ">
-              <span className=" text-orange-400 bg-[#f3f2ef]  text-base bg-white px-4 ">
+              <span className=" text-orange-400 bg-[#f3f2ef]  text-base  px-4 ">
                 or
               </span>
             </div>
