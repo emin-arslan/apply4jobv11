@@ -21,7 +21,7 @@ const JobsPage = () => {
     <div className="w-11/12 mt-5 xl:w-full lg:w-full md:w-full  sm:w-full   flex ">
       <div className="w-5/12 xl:w-5/12 lg:w-6/12 md:w-6/12  sm:w-full lg:items-start  xl:items-end  flex flex-col items-end">
         <div className="w-9/12 h-10 lg:w-full xl:w-9/12 md:w-full space-x-2 sm:w-full  bg-orange-500 rounded-tl-lg flex items-center text-white font-bold ">
-          <span className="ml-2 w-5/12">
+          <span className="ml-2 text-sm w-4/12">
             {jobTitle.length === 2 ? jobTitle[1] : "Karışık"} iş ilanları
           </span>
           <div className="  centered-items space-x-4 w-8/12">
@@ -102,7 +102,7 @@ const JobsPage = () => {
         </div>
       </div>
       <div className="w-6/12 xl:w-5/12 md:w-6/12 lg:w-9/12 2xl:8/12  sm:hidden bg-white rounded-r-lg overflow-y-scroll h-32">
-        sad
+        Job details
       </div>
     </div>
   );
