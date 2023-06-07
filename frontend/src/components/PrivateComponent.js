@@ -4,9 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { UserReducer } from '../redux/reducers/UserReducer';
 import { delay } from 'redux-saga/effects';
 
-const PrivateComponent =  (lifesycle) => {
-    let userData = lifesycle;
-    if(userData.lifesycle===true){
+const PrivateComponent =  () => {
+    let lifesycle = localStorage.getItem("lifesycle");
+    console.warn(lifesycle)
+    if(lifesycle=="true"){
         return <Outlet/>
     }
     else return <Navigate to="/login"/>

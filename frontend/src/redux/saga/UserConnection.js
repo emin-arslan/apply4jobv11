@@ -40,6 +40,7 @@ export function* userCheck() {
     let data = { user, auth, lifesycle: true };
     yield put({ type: REDUX_SET_USERDATA, data });
   } 
+  else localStorage.setItem("lifesycle", false);
 }
 
 export function* userSignUp({ user }) {

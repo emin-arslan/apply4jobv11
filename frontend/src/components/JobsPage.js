@@ -1,14 +1,58 @@
-import React from "react";
-
+import React, { useRef, useState } from "react";
+import "../checkbox.css";
+import { ReactComponent as linkedinLogo } from "../assets/location.svg";
 const JobsPage = () => {
+  const [jobTitle, setJobTitle] = useState(["Karışık"]);
+  const onCheckHandle = (e, webSiteName) => {
+    let yeniListe = [...jobTitle];
+    if (e) {
+      yeniListe.push(webSiteName);
+      setJobTitle(yeniListe);
+    } else {
+      const index = yeniListe.indexOf(webSiteName);
+      if (index !== -1) {
+        yeniListe.splice(index, 1);
+      }
+
+      setJobTitle(yeniListe);
+    }
+  };
   return (
-    <div className="w-11/12 xl:w-full lg:w-full md:w-full mt-2 sm:w-full  min-w-[400px]  flex ">
-      <div className="w-6/12 xl:w-5/12 lg:w-6/12 md:w-5/12 sm:w-full lg:items-start xl:items-end  flex flex-col items-end">
-        <div className="w-9/12 h-10 lg:w-full xl:w-9/12 md:w-full sm:w-full  bg-orange-500 rounded-tl-lg flex items-center text-white font-bold ">
-          <span className="ml-2">Karışık iş ilanları</span>
+    <div className="w-11/12 mt-5 xl:w-full lg:w-full md:w-full  sm:w-full   flex ">
+      <div className="w-5/12 xl:w-5/12 lg:w-6/12 md:w-6/12  sm:w-full lg:items-start  xl:items-end  flex flex-col items-end">
+        <div className="w-9/12 h-10 lg:w-full xl:w-9/12 md:w-full space-x-2 sm:w-full  bg-orange-500 rounded-tl-lg flex items-center text-white font-bold ">
+          <span className="ml-2 w-5/12">
+            {jobTitle.length === 2 ? jobTitle[1] : "Karışık"} iş ilanları
+          </span>
+          <div className="  centered-items space-x-4 w-8/12">
+            <input
+              type="checkbox"
+              data-name="linkedin"
+              class="checkbox"
+              onClick={(e) => onCheckHandle(e.target.checked, "Linkedin")}
+            />
+            <input
+              type="checkbox"
+              data-name="freelancer"
+              class="checkbox"
+              onClick={(e) => onCheckHandle(e.target.checked, "Freelancer")}
+            />
+            <input
+              type="checkbox"
+              data-name="indeed"
+              class="checkbox"
+              onClick={(e) => onCheckHandle(e.target.checked, "Indeed")}
+            />
+            <input
+              type="checkbox"
+              data-name="grabjobs"
+              class="checkbox"
+              onClick={(e) => onCheckHandle(e.target.checked, "Grabjobs")}
+            />
+          </div>
         </div>
-        <div className="w-9/12 lg:w-full xl:w-9/12 md:w-full sm:w-full h-[85vh] border overflow-y-scroll">
-          <div className="w-full h-auto bg-white  p-[0.4rem]  ">
+        <div className="w-9/12 lg:w-full xl:w-9/12 md:w-full  sm:w-full h-[85vh] hover:cursor-pointer   border overflow-y-scroll">
+          <div className="w-full h-auto bg-white  p-[0.4rem]   ">
             <div className="flex w-full space-x-3">
               <div>
                 <img
@@ -57,7 +101,7 @@ const JobsPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-5/12 xl:w-5/12 md:w-7/12 lg:w-9/12 sm:hidden bg-white rounded-r-lg overflow-y-scroll h-32">
+      <div className="w-6/12 xl:w-5/12 md:w-6/12 lg:w-9/12 2xl:8/12  sm:hidden bg-white rounded-r-lg overflow-y-scroll h-32">
         sad
       </div>
     </div>

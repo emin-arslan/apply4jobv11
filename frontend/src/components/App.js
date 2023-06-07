@@ -13,19 +13,19 @@ import { userCheck } from "../redux/actions/UserCheck";
 import { useEffect, useState } from "react";
 import axios from 'axios'
 import history from "../history";
+import { delay } from "redux-saga/effects";
 
 function App() {
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("user");
-  
+ 
   const [ip,setIP] = useState('');
   const dispatch = useDispatch();
   const getData = async()=>{
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
 }
-  useEffect(() => {
-    
+  useEffect((e) => {
     getData()
     if (
       user &&
@@ -36,14 +36,16 @@ function App() {
       token !== ""
     )
       dispatch(userCheck());
+      
   }, []);
   const userData = useSelector((state)=> state.UserReducer)
   return (
-    <div className="App ">
+    <div className="App min-w-[400px]">
+     
       <div className="md:container  lg:container xl:container 2xl:container 3xl:container md:mx-auto lg:mx-auto xl:mx-auto 2xl:mx-auto 3xl:mx-auto sm:w-full p-2">
-        <Navi />
+         <Navi />
         <Routes history={history}>
-          <Route element={<PrivateComponent lifesycle={userData.userData.lifesycle}/>}>
+          <Route element={<PrivateComponent lifesycle={userData.userData.lifesycle !== undefined && userData.userData.lifesycle }/>}>
             <Route path="/jobs" element={<JobsPage />} />
           </Route>
           <Route path="/login" element={<Login />} />

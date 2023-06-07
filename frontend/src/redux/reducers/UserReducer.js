@@ -1,15 +1,15 @@
 import { REDUX_USER_LOGOUT, REDUX_SET_USERDATA } from "../actions/actionTypes";
 const INITIAL_STATE = {
   userData: {},
-  auth: "",
-  lifesycle:false
 };
 export const UserReducer = (state = INITIAL_STATE, action) => {
+  console.log('girdi')
   switch (action.type) {
     case REDUX_SET_USERDATA:
         console.warn(action)
         localStorage.setItem("token", JSON.stringify(action.data.auth));
         localStorage.setItem("user", JSON.stringify(action.data.user));
+        localStorage.setItem("lifesycle", JSON.stringify(action.data.lifesycle));
         return { 
           userData: action.data
         };
@@ -19,7 +19,7 @@ export const UserReducer = (state = INITIAL_STATE, action) => {
         localStorage.clear();
       }
         
-      return {};
+      return { userData: {}};
 
     default:
       return state;
