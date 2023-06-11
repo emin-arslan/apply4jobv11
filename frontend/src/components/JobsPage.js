@@ -1,7 +1,13 @@
 import React, { useRef, useState } from "react";
 import "../checkbox.css";
 import { ReactComponent as linkedinLogo } from "../assets/location.svg";
+import JobsDetails from "./JobsDetails";
 const JobsPage = () => {
+  const [selectedDiv, setSelectedDiv] = useState(null)
+  const choosenDiv = useRef();
+  const handleSelect = () => {
+
+  }
   const [jobTitle, setJobTitle] = useState(["Karışık"]);
   const onCheckHandle = (e, webSiteName) => {
     let yeniListe = [...jobTitle];
@@ -18,13 +24,13 @@ const JobsPage = () => {
     }
   };
   return (
-    <div className="w-11/12 mt-5 xl:w-full lg:w-full md:w-full  sm:w-full   flex ">
-      <div className="w-5/12 xl:w-5/12 lg:w-6/12 md:w-6/12  sm:w-full lg:items-start  xl:items-end  flex flex-col items-end">
+    <div className="w-11/12  mt-5 xl:w-full lg:w-full md:w-full sm:w-full   flex ">
+      <div  className="w-5/12  xl:w-[600px] xl:-ml-16 2xl:-ml-6  lg:w-6/12 md:w-5/12  sm:w-full lg:items-start  xl:items-end  flex flex-col items-end">
         <div className="w-9/12 h-10 lg:w-full xl:w-9/12 md:w-full space-x-2 sm:w-full  bg-orange-500 rounded-tl-lg flex items-center text-white font-bold ">
-          <span className="ml-2 text-sm w-4/12">
+          <span className="ml-2 md:ml-1 text-sm w-4/12 md:text-xs">
             {jobTitle.length === 2 ? jobTitle[1] : "Karışık"} iş ilanları
           </span>
-          <div className="  centered-items space-x-4 w-8/12">
+          <div className="  centered-items md:space-x-2 space-x-4 w-8/12">
             <input
               type="checkbox"
               data-name="linkedin"
@@ -51,7 +57,7 @@ const JobsPage = () => {
             />
           </div>
         </div>
-        <div className="w-9/12 lg:w-full xl:w-9/12 md:w-full  sm:w-full h-[85vh] hover:cursor-pointer   border overflow-y-scroll">
+        <div className="w-9/12 lg:w-full xl:w-9/12 md:w-full   sm:w-full h-[84vh] hover:cursor-pointer   border overflow-y-scroll">
           <div className="w-full h-auto bg-white  p-[0.4rem]   ">
             <div className="flex w-full space-x-3">
               <div>
@@ -65,7 +71,7 @@ const JobsPage = () => {
               <div>
                 <div className="hover:underline hover:cursor-pointer">
                   {" "}
-                  <span className="text-blue-500  text-lg font-semibold">
+                  <span className="text-blue-500 md:text-sm text-lg font-semibold">
                     OBSS New Graduates 2023
                   </span>
                 </div>
@@ -101,8 +107,8 @@ const JobsPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-6/12 xl:w-5/12 md:w-6/12 lg:w-9/12 2xl:8/12  sm:hidden bg-white rounded-r-lg overflow-y-scroll h-32">
-        Job details
+      <div className="w-6/12 h-[88vh] 2xl:w-[46rem] xl:w-[44rem] md:w-7/12 lg:w-9/12 2xl:8/12  sm:hidden bg-white  rounded-r-lg overflow-y-scroll ">
+        <JobsDetails/>
       </div>
     </div>
   );

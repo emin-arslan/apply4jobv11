@@ -7,11 +7,15 @@ const Jwt = require("jsonwebtoken");
 const isMailValid = require("./utils");
 const jwtKey = "apply4job";
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
+const mailSender = require("./mailService/mail");
+let randomNumber = 0;
 app.use(express.json());
 
-app.post("/login", async (req, resp) => {
+function getRandomInt(max) {
+  return 10000+Math.floor(Math.random() * max);
+}
 
+app.post("/login", async (req, resp) => {
   if (req.body.email && req.body.password) {
     const user = await User.findOne(req.body).select("-password");
     if (user) {
@@ -43,7 +47,8 @@ app.post("/login", async (req, resp) => {
     });
 });
 
-app.post("/signup", async (req, resp) => {
+
+app.post("/checkuser", async (req, resp) => {
   if (
     req.body.email &&
     typeof req.body.email === "string" &&
@@ -57,51 +62,118 @@ app.post("/signup", async (req, resp) => {
     if (user) {
       resp.status(200).send({
         result: false,
-        status: 200,
+        status: 400,
         body: "There is such an e-mail.",
       });
-    } else {
-      user = await User.insertMany(req.body);
-      if (user) {
-        Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
-          if (err) {
-            resp.status(200).send({
-              result: false,
-              status: 200,
-              body: err,
-            });
-          } else
-          {
-            resp.status(200).send({
-              user,
-              result: true,
-              status: 200,
-              body: "Succesfull.Redirecting...",
-              auth: token,
-            });
-            
-          }
-            
-        });
-     
-      } else {
+    }
+    else{
+      randomNumber = getRandomInt(100000);
+      if(mailSender("NoReply@apply4job.com",req.body.email,"hello","Vertify code:"+randomNumber))
+      {
         resp.status(200).send({
-          result: false,
+          result: true,
           status: 200,
-          body: "Unexpected error",
+          body: "Vertify code sended",
         });
       }
+      else{
+        resp.status(200).send({
+          result: false,
+          status: 400,
+          body: "ERROR CODE 593",
+        });
+      }
+      
+      
     }
   } else {
+    
     resp.status(200).send({
       result: false,
-      status: 200,
+      status: 400,
       body: "E-mail or password couldn't be blank.",
     });
   }
+})
+
+
+app.post("/signup", async (req, resp) => {
+  console.warn(req)
+  console.warn('burdayık.')
+  if (
+    req.body.email &&
+    typeof req.body.email === "string" &&
+    isMailValid(req.body.email) &&
+    req.body.password &&
+    req.body.ipAddress
+  ) {
+    let user = await User.findOne({ email: req.body.email }).select(
+      "-password"
+    );
+    if (user) {
+      resp.status(200).send({
+        result: false,
+        status: 400,
+        body: "There is such an e-mail.",
+      });
+    }
+    else{
+      if(randomNumber == req.body.vertifyNumber)
+      {
+        user = await User.insertMany(req.body);
+        if (user) {
+          Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+            if (err) {
+              resp.status(200).send({
+                result: false,
+                status: 200,
+                body: err,
+              });
+            } else {
+              resp.status(200).send({
+                user,
+                result: true,
+                status: 200,
+                body: "Succesfull.Redirecting...",
+                auth: token,
+              });
+            }
+          });
+        }
+        else 
+        {
+          resp.status(400).send({
+            result: false,
+            status: 200,
+            body: "Server doesn't response",
+          });
+        } 
+      }
+      else{
+        console.warn("req",req.body.vertifyNumber )
+        console.warn(randomNumber)
+        resp.status(200).send({
+          result: false,
+          status: 400,
+          body: "onaylanmadı.",
+        });
+      }
+      
+    }
+  } else {
+    
+    resp.status(200).send({
+      result: false,
+      status: 400,
+      body: "E-mail or password couldn't be blank.",
+    });
+  }
+  
+  
+  
 });
 
-app.post("/check", verifyToken, async (req, resp) => {
+app.post("/checkconnection", verifyToken, async (req, resp) => {
   resp.status(200).send({
     result: true,
     status: 200,

@@ -26,8 +26,8 @@ export function* userLogin({ payload }) {
   }
 }
 
-export function* userCheck() {
-  let result = yield fetch("http://localhost:5000/check", {
+export function* checkConnection() {
+  let result = yield fetch("http://localhost:5000/checkconnection", {
     method: "post",
     headers: {
       authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
@@ -43,9 +43,10 @@ export function* userCheck() {
   else localStorage.setItem("lifesycle", false);
 }
 
-export function* userSignUp({ user }) {
+export function* userCheck({ user }) {
+  console.warn("we are here", user)
   const { email, password, ipAddress } = user;
-  let data =  yield fetch("http://localhost:5000/signup", {
+  let data =  yield fetch("http://localhost:5000/checkuser", {
       method: "POST",
       body: JSON.stringify({ email, password, ipAddress }),
       headers: {
@@ -54,13 +55,36 @@ export function* userSignUp({ user }) {
     });
   data = yield data.json();
   if (data.result) {
+    data.isSendVertifyCode = true
     yield put({ type: REDUX_SET_USERDATA, data });
-    
+    yield put({ type: "SET_VERIFY_CODE_STATUS",isSendVertifyCode:data.isSendVertifyCode });
     tostMessageCheck({ body: data.body, isSuccess: true });
-    yield delay(2000)
-    history.push("/")
-    history.go();
+
   } else {
     tostMessageCheck({ body: data.body, isSuccess: false });
   }
+}
+
+export function* userSignUp ( {user}){
+  console.warn("we are here",user)
+  const { email, password, ipAddress,vertifyNumber } = user;
+  let data =  yield fetch("http://localhost:5000/signup", {
+      method: "POST",
+      body: JSON.stringify({ email, password, ipAddress,vertifyNumber }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  data = yield data.json();
+  if (data.result) {
+    yield put({ type: REDUX_SET_USERDATA, data });
+    tostMessageCheck({body:data.body,isSuccess:true})
+    yield delay(2000)
+    history.push("/")
+    history.go();
+  }
+  else {
+    tostMessageCheck({ body: data.body, isSuccess: false });
+  }
+  
 }

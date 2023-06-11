@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateComponent from "./PrivateComponent";
 import JobsPage from "./JobsPage";
 import { useDispatch, useSelector } from "react-redux";
-import { userCheck } from "../redux/actions/UserCheck";
+import { UserConnectionCheck } from "../redux/actions/UserConnectionCheck";
 import { useEffect, useState } from "react";
 import axios from 'axios'
 import history from "../history";
@@ -35,14 +35,14 @@ function App() {
       user !== "" &&
       token !== ""
     )
-      dispatch(userCheck());
+      dispatch(UserConnectionCheck());
       
   }, []);
   const userData = useSelector((state)=> state.UserReducer)
   return (
     <div className="App min-w-[400px]">
      
-      <div className="md:container  lg:container xl:container 2xl:container 3xl:container md:mx-auto lg:mx-auto xl:mx-auto 2xl:mx-auto 3xl:mx-auto sm:w-full p-2">
+      <div className="md:container   lg:container xl:container 2xl:container 3xl:container md:mx-auto lg:mx-auto xl:mx-auto 2xl:mx-auto 3xl:mx-auto sm:w-full p-2">
          <Navi />
         <Routes history={history}>
           <Route element={<PrivateComponent lifesycle={userData.userData.lifesycle !== undefined && userData.userData.lifesycle }/>}>
