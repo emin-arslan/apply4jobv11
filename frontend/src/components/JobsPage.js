@@ -1,14 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../checkbox.css";
 import { ReactComponent as linkedinLogo } from "../assets/location.svg";
 import JobsDetails from "./JobsDetails";
+import backPng from '../assets/back.png'
 const JobsPage = () => {
-  const [selectedDiv, setSelectedDiv] = useState(null)
+  const [selectedDiv, setSelectedDiv] = useState(null);
   const choosenDiv = useRef();
-  const handleSelect = () => {
-
-  }
+  const [isPopDetailsOpen, setIsPopDetailsOpen] = useState(false);
+  const handleSelect = () => {};
   const [jobTitle, setJobTitle] = useState(["Karışık"]);
+  const postHandleClick = (type) => {
+    setIsPopDetailsOpen(type);
+  };
   const onCheckHandle = (e, webSiteName) => {
     let yeniListe = [...jobTitle];
     if (e) {
@@ -25,7 +28,19 @@ const JobsPage = () => {
   };
   return (
     <div className="w-11/12  mt-5 xl:w-full lg:w-full md:w-full sm:w-full   flex ">
-      <div  className="w-5/12  xl:w-[600px] xl:-ml-16 2xl:-ml-6  lg:w-6/12 md:w-5/12  sm:w-full lg:items-start  xl:items-end  flex flex-col items-end">
+      {isPopDetailsOpen ? 
+      <div className="bg-white w-screen shadow-2xl  overflow-y-scroll h-[88vh]">
+        <div className="w-full p-2  flex justify-start items-center"> <span className="hover:cursor-pointer" onClick={()=>postHandleClick(false)}>
+          <img src={backPng} alt="s"></img>
+        </span>
+          </div>
+       
+       <div className="-mt-5"> <JobsDetails /> 
+        </div>
+       
+        </div>: 
+      
+      <div className="w-5/12  xl:w-[600px] xl:-ml-16 2xl:-ml-6  lg:w-6/12 md:w-5/12  sm:w-full lg:items-start  xl:items-end  flex flex-col items-end">
         <div className="w-9/12 h-10 lg:w-full xl:w-9/12 md:w-full space-x-2 sm:w-full  bg-orange-500 rounded-tl-lg flex items-center text-white font-bold ">
           <span className="ml-2 md:ml-1 text-sm w-4/12 md:text-xs">
             {jobTitle.length === 2 ? jobTitle[1] : "Karışık"} iş ilanları
@@ -57,7 +72,10 @@ const JobsPage = () => {
             />
           </div>
         </div>
-        <div className="w-9/12 lg:w-full xl:w-9/12 md:w-full   sm:w-full h-[84vh] hover:cursor-pointer   border overflow-y-scroll">
+        <div
+          onClick={()=>{postHandleClick(true)}}
+          className="w-9/12 lg:w-full xl:w-9/12 md:w-full   sm:w-full h-[84vh] hover:cursor-pointer   border overflow-y-scroll"
+        >
           <div className="w-full h-auto bg-white  p-[0.4rem]   ">
             <div className="flex w-full space-x-3">
               <div>
@@ -107,9 +125,11 @@ const JobsPage = () => {
           </div>
         </div>
       </div>
+         }
       <div className="w-6/12 h-[88vh] 2xl:w-[46rem] xl:w-[44rem] md:w-7/12 lg:w-9/12 2xl:8/12  sm:hidden bg-white  rounded-r-lg overflow-y-scroll ">
-        <JobsDetails/>
+        <JobsDetails />
       </div>
+   
     </div>
   );
 };

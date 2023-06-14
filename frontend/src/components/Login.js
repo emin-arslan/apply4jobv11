@@ -6,13 +6,13 @@ import { loginRequest } from "../redux/actions/UserLogin";
 import { userLogout } from "../redux/actions/UserLogout";
 import { delay } from "redux-saga/effects";
 import { toastMessage } from "../redux/actions/ToastMessageRequest";
-
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isShown, setIsShown] = useState(false);
   let myTimeout;
 
   let getResult = useSelector((state) => state.UserReducer.result);
@@ -35,19 +35,24 @@ const Login = () => {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       };
-      if (!signUpData.email || !signUpData.password ) {
+      if (!signUpData.email || !signUpData.password) {
         dispatch(
           toastMessage({
             body: "Boş alan bırakmayınız",
             isSuccess: false,
           })
         );
-        setIsDisabled(true)
-        myTimeout = setTimeout(changeDisabledStatus,3000);
+        setIsDisabled(true);
+        myTimeout = setTimeout(changeDisabledStatus, 3000);
       } else {
-        dispatch(loginRequest({ email: signUpData.email , password:signUpData.password }));
-        setIsDisabled(true)
-        myTimeout = setTimeout(changeDisabledStatus,3000);
+        dispatch(
+          loginRequest({
+            email: signUpData.email,
+            password: signUpData.password,
+          })
+        );
+        setIsDisabled(true);
+        myTimeout = setTimeout(changeDisabledStatus, 3000);
       }
     }
   };
@@ -93,7 +98,6 @@ const Login = () => {
           <div className="space-y-1">
             <div className="">
               <label
-              
                 htmlFor="passwordBox"
                 id="passwordBox"
                 className="text-sm text-gray-500"
@@ -112,15 +116,27 @@ const Login = () => {
                     changeDisabledStatus();
                   }}
                 />
-                <span className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600">
-                  Show
+                <span
+                  onClick={() => {
+                    if (isShown) {
+                      passwordRef.current.type = "password";
+                    } else {
+                      passwordRef.current.type = "text";
+                    }
+                    setIsShown(!isShown);
+                  }}
+                  className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600"
+                >
+                  {isShown ? "Hide" : "Show"}
                 </span>
               </div>
             </div>
             <div className=" w-10/12  flex ">
-              <span className="text-l hover:underline text-orange-500 hover:text-orange-600 hover:cursor-pointer">
-                Forgetten Password
-              </span>
+              <Link to={"/forgotpassword"}>
+                <span className="text-l hover:underline text-orange-500 hover:text-orange-600 hover:cursor-pointer">
+                  Forgetten Password
+                </span>
+              </Link>
             </div>
           </div>
 

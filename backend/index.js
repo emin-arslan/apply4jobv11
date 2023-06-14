@@ -173,6 +173,26 @@ app.post("/signup", async (req, resp) => {
   
 });
 
+app.post("/newpassword", async(req,resp)=>{
+  let user = await User.findOne({ email: req.body.email });
+  console.log(req.body.email,user)
+  if(user){
+    mailSender("helpApply4job@gmail.com",user.email,"Unutulan password",user.password)
+    resp.status(200).send({
+      result: true,
+      status: 200,
+      body: "Password sended to your e-mail",
+    });
+  }
+  else{
+    resp.status(200).send({
+      result: true,
+      status: 200,
+      body: "Password sended to your e-mail",
+    });
+  }
+})
+
 app.post("/checkconnection", verifyToken, async (req, resp) => {
   resp.status(200).send({
     result: true,

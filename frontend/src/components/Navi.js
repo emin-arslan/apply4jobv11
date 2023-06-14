@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { userLogout } from "../redux/actions/UserLogout";
 import { ReactComponent as Searchlogo } from "../assets/search.svg";
 import { ReactComponent as LocationLogo } from "../assets/location.svg";
+import HamburgerMenu from "./HamburgerMenu";
 const Navi = () => {
   const user = useSelector((state) => state.UserReducer);
   const location = useLocation();
@@ -16,7 +17,9 @@ const Navi = () => {
     navigate("/");
   };
   return (
+   
     <div className="w-11/12 h-20  xl:w-full flex items-center text-[#707070]   md:w-full  space-x-2 font-exo lg:w-full sm:justify-center sm:w-full  ">
+       
       <div className="w-3/12 xl:w-2/12 xl:justify-end  lg:w-2/12 lg:justify-start sm:min-w-[400px]  h-full  centered-items ">
         <Link to="/">
           <span className=" orange font-bold text-2xl font-sans  ">
@@ -24,7 +27,7 @@ const Navi = () => {
           </span>
         </Link>
       </div>
-      {location.pathname!=="/signup" && location.pathname!=="/login"&&
+      {location.pathname!=="/signup" && location.pathname!=="/login"&&  location.pathname!=="/forgotpassword" &&
       <div className="w-6/12 xl:w-8/12  lg:w-8/12 h-full centered-items  lg:centered-items md:w-full   sm:hidden flex justify-base">
         {location.pathname === "/jobs" ? (
           <div className="flex space-x-5 items-center">
@@ -37,10 +40,18 @@ const Navi = () => {
               </span>
               <input 
                 onFocus={() =>
-                  searchDivAbility.current.classList.toggle("border-blue-400")
+                  {
+                    searchDivAbility.current.classList.remove("border-orange-400")
+                    searchDivAbility.current.classList.add("border-blue-400")
+                  }
+                  
                 }
                 onBlur={() =>
-                  searchDivAbility.current.classList.remove("border-blue-400")
+                  {
+                    searchDivAbility.current.classList.remove("border-blue-400")
+                  searchDivAbility.current.classList.add("border-orange-400")
+                  }
+                  
                 }
                 placeholder="Ünvan veya yetenek"
                 className="h-full md:text-sm md:w-[130px] focus:outline-none bg-[#F9F9F9]    "
@@ -56,10 +67,16 @@ const Navi = () => {
               </span>
               <input
                 onFocus={() =>
-                  searchDivLocation.current.classList.toggle("border-blue-400")
+                  {
+                    searchDivLocation.current.classList.remove("border-orange-400")
+                    searchDivLocation.current.classList.add("border-blue-400")
+                  }
                 }
                 onBlur={() =>
-                  searchDivLocation.current.classList.remove("border-blue-400")
+                  {
+                    searchDivLocation.current.classList.remove("border-blue-400")
+                    searchDivLocation.current.classList.add("border-orange-400")
+                  }
                 }
                 placeholder="Location, city etc."
                 className="h-full focus:outline-none md:text-sm md:w-[130px]  bg-[#F9F9F9]    "
@@ -88,7 +105,7 @@ const Navi = () => {
 
       <div
         className={`w-3/12 md:w-4/12 lg:w-2/12  xl:w-2/12 h-full  sm:hidden h-10 md:space-x-2 space-x-5 centered-items ${
-          location.pathname === "/login" || location.pathname === "/signup"
+          location.pathname === "/login" || location.pathname === "/signup" || location.pathname==="/forgotpassword" 
             ? "hidden"
             : "visible"
         }  `}

@@ -5,8 +5,8 @@ import { UserReducer } from '../redux/reducers/UserReducer';
 import { delay } from 'redux-saga/effects';
 
 const PrivateComponent =  () => {
+   
     let lifesycle = localStorage.getItem("lifesycle");
-    console.warn(lifesycle)
     if(lifesycle=="true"){
         return <Outlet/>
     }

@@ -8,8 +8,10 @@ import { loginRequest } from "../redux/actions/UserLogin";
 const HomePage = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const passwordDiv = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
   let myTimeout;
+  const [isShown, setIsShown] = useState(false);
 
   const changeDisabledStatus = () => {
     setIsDisabled(false);
@@ -79,35 +81,65 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="w-11/12 sm:w-full md:w-full md:justify-start   xl:w-9/12 xl:justify-center  sm:justify-center lg:justify-start  flex justify-start">
-          <div className="w-8/12  sm:w-8/12 lg:w-8/12  xl:w-7/12  md:w-11/12 ">
+        <div className="w-11/12 sm:w-full md:w-full md:justify-start    xl:w-9/12 xl:justify-center  sm:justify-center lg:justify-start  flex justify-start">
+          <div className="w-8/12  sm:w-8/12 lg:w-8/12  xl:w-7/12   md:w-11/12 ">
             <div className="w-full ">
               <label htmlFor="idValue" className="text-sm text-gray-500">
                 Password
               </label>
             </div>
-            <div className="w-full">
+            <div
+              ref={passwordDiv}
+              className="bg-white border-orange-400 border justify-baseline items-center flex  p-1  w-full h-12 rounded"
+            >
               <input
-                ref={passwordRef}
+                onFocus={() => {
+                  passwordDiv.current.classList.add("border-orange-600");
+                  passwordDiv.current.classList.add("border-2");
+                }}
+                onBlur={() => {
+                  passwordDiv.current.classList.remove("border-orange-600");
+                  passwordDiv.current.classList.remove("border-2");
+                }}
                 type="password"
-                id="idValue"
-                name="idValue"
-                className=" w-full h-12 p-5 border-orange-400 border text-gray-500 rounded focus:outline-orange-600"
-              ></input>
+                ref={passwordRef}
+                className="w-9/12 h-10 p-4 text-gray-500 focus:outline-none"
+                onChange={() => {
+                  changeDisabledStatus();
+                }}
+              />
+              <span
+                onClick={() => {
+                  if (isShown) {
+                    passwordRef.current.type = "password";
+                  } else {
+                    passwordRef.current.type = "text";
+                  }
+                  setIsShown(!isShown);
+                }}
+                className="w-3/12 flex items-center justify-center hover:cursor-pointer text-sm text-orange-600"
+              >
+                {isShown ? "Hide" : "Show"}
+              </span>
             </div>
           </div>
         </div>
 
         <div className="w-11/12  sm:w-full md:w-full flex  justify-start lg:justify-start xl:w-9/12 xl:justify-center  sm:justify-center md:justify-start   ">
           <div className="w-8/12 sm:w-8/12 lg:w-9/12  w-7/12 flex md:w-11/12">
-            <span className="text-l underline orange hover:text-orange-700 hover:cursor-pointer">
-              Forgetten Password?
-            </span>
+            <Link to={"/forgotpassword"}>
+              <span className="text-l underline orange hover:text-orange-700 hover:cursor-pointer">
+                Forgetten Password?
+              </span>
+            </Link>
           </div>
         </div>
 
         <div className="w-11/12  sm:w-full md:w-full md:justify-start lg:justify-start xl:w-9/12 xl:justify-center sm:justify-center flex justify-start ">
-          <div onClick={handleLoginClick} className=" hover:cursor-pointer lg:w-8/12  xl:w-7/12  text-white flex items-center hover:bg-orange-400 justify-center  w-8/12 sm:w-8/12   md:w-11/12 bg-orange-500 rounded-xl h-10">
+          <div
+            onClick={handleLoginClick}
+            className=" hover:cursor-pointer lg:w-8/12  xl:w-7/12  text-white flex items-center hover:bg-orange-400 justify-center  w-8/12 sm:w-8/12   md:w-11/12 bg-orange-500 rounded-xl h-10"
+          >
             <span className=" font-bold">Login</span>
           </div>
         </div>
