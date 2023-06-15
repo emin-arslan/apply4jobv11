@@ -3,15 +3,30 @@ import "../checkbox.css";
 import { ReactComponent as linkedinLogo } from "../assets/location.svg";
 import JobsDetails from "./JobsDetails";
 import backPng from '../assets/back.png'
+import { useDispatch, useSelector } from "react-redux";
+import JobDetailsPopUp from "../redux/actions/JobDetailsPopUp";
 const JobsPage = () => {
   const [selectedDiv, setSelectedDiv] = useState(null);
   const choosenDiv = useRef();
+  const dispatch = useDispatch()
   const [isPopDetailsOpen, setIsPopDetailsOpen] = useState(false);
   const handleSelect = () => {};
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [jobTitle, setJobTitle] = useState(["Karışık"]);
+  let checkWindowSizeLine = false;
   const postHandleClick = (type) => {
-    setIsPopDetailsOpen(type);
+    if(type)
+    if( windowWidth > 768 ){
+      setIsPopDetailsOpen(false)
+    }
+    else
+    {
+      setIsPopDetailsOpen(true)
+    }
+    else
+      setIsPopDetailsOpen(false)
   };
+
   const onCheckHandle = (e, webSiteName) => {
     let yeniListe = [...jobTitle];
     if (e) {
@@ -26,10 +41,32 @@ const JobsPage = () => {
       setJobTitle(yeniListe);
     }
   };
+
+  useEffect(() => {
+    
+    const handleWindowResize = () => {
+      setWindowWidth(window.innerWidth);
+      if( windowWidth > 768 ){
+        setIsPopDetailsOpen(false)
+      }
+      else if( windowWidth < 768 && checkWindowSizeLine === true )
+      {
+        setIsPopDetailsOpen(true)
+      }
+    };
+
+    // Pencere boyutu değiştiğinde olay dinleyicisini ekleyin
+    window.addEventListener('resize', handleWindowResize);
+
+    // Component kaldırıldığında olay dinleyicisini kaldırın
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
   return (
     <div className="w-11/12  mt-5 xl:w-full lg:w-full md:w-full sm:w-full   flex ">
       {isPopDetailsOpen ? 
-      <div className="bg-white w-screen shadow-2xl  overflow-y-scroll h-[88vh]">
+      <div className="bg-white w-screen shadow-2xl  overflow-y-scroll h-[92vh]">
         <div className="w-full p-2  flex justify-start items-center"> <span className="hover:cursor-pointer" onClick={()=>postHandleClick(false)}>
           <img src={backPng} alt="s"></img>
         </span>
